@@ -17,8 +17,8 @@ options:
   repository: null
   git_branch: master
   git_remote: origin
-  playbook: 'playbook.yaml'
-  auto_restart: false
+  ansible_playbook: 'playbook.yaml'
+  ansible_vault_secret: ''
   git_command: pull
   git_prune: false
   deployment_key: []
@@ -32,8 +32,8 @@ schema:
   repository: str
   git_branch: str
   git_remote: str
-  playbook: str
-  auto_restart: bool
+  ansible_playbook: str
+  ansible_vault_secret: str
   git_command: list(pull|reset)
   git_prune: bool
   deployment_key:
