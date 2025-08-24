@@ -1,0 +1,49 @@
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
+name: Ansible Runner
+version: "0.1.0"
+slug: ansible-runner
+description: A dockerized Ansible runner
+url: "https://github.com/vguttmann/homeassistant-ansible-runner/tree/main/ansible-runner"
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+init: false
+map:
+  - share:rw
+options:
+  repository: null
+  git_branch: master
+  git_remote: origin
+  playbook: 'playbook.yaml'
+  auto_restart: false
+  git_command: pull
+  git_prune: false
+  deployment_key: []
+  deployment_user: ""
+  deployment_password: ""
+  deployment_key_protocol: rsa
+  repeat:
+    active: false
+    interval: 300
+schema:
+  repository: str
+  git_branch: str
+  git_remote: str
+  playbook: str
+  auto_restart: bool
+  git_command: list(pull|reset)
+  git_prune: bool
+  deployment_key:
+    - str
+  deployment_user: str
+  deployment_password: password
+  deployment_key_protocol: match(rsa|dsa|ecdsa|ed25519|rsa)
+  repeat:
+    active: bool
+    interval: int
+image: "ghcr.io/vguttmann/{arch}-homeassistant-ansible-runner"
+startup: once
+boot: manual

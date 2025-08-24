@@ -1,6 +1,6 @@
-# Home Assistant Add-on: Example add-on
+# Ansible Runner Add-on: Execute playbooks through Home Assistant
 
-_Example add-on to use as a blueprint for new add-ons._
+The only constant and 100% reliable part in my Homelab has been Home Assistant, so I decided to base the Ansible Runner that configurest the rest of my Homelab here.
 
 ![Supports aarch64 Architecture][aarch64-shield]
 ![Supports amd64 Architecture][amd64-shield]

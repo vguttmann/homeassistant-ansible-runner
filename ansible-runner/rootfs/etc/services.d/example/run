@@ -8,12 +8,20 @@
 
 # Declare variables
 declare message
+declare url
+declare repo
+declare branch
 
 ## Get the 'message' key from the user config options.
 message=$(bashio::config 'message')
-
-## Print the message the user supplied, defaults to "Hello World..."
-bashio::log.info "${message:="Hello World..."}"
+url=$(bashio::config 'repo')
+repo=$(echo $URL | sed -E 's@https:\/\/github\.com\/[^\/]+\/@@' | sed -E 's@.git$@@')
+branch=$(bashio::config 'branch')
 
 ## Run your program
-exec /usr/bin/my_program
+git clone https://username:password@host
+
+exec rm -rf $repo && git clone $url && cd $repo && git checkout -b ${branch:='main'} && ansible-playbook site.yml
+
+COPY data/run.sh /
+
