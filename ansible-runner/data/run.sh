@@ -14,17 +14,17 @@ ansible-playbook site.yml
 CONFIG_PATH=/data/options.json
 HOME=~
 
+REPOSITORY=$(bashio::config 'repository')
+GIT_BRANCH=$(bashio::config 'git_branch')
+GIT_REMOTE=$(bashio::config 'git_remote')
+ANSIBLE_PLAYBOOK=$(bashio::config 'ansible_playbook')
+ANSIBLE_VAULT_SECRET=$(bashio::config 'ansible_vault_secret')
+GIT_COMMAND=$(bashio::config 'git_command')
+GIT_PRUNE=$(bashio::config 'git_prune')
 DEPLOYMENT_KEY=$(bashio::config 'deployment_key')
-DEPLOYMENT_KEY_PROTOCOL=$(bashio::config 'deployment_key_protocol')
 DEPLOYMENT_USER=$(bashio::config 'deployment_user')
 DEPLOYMENT_PASSWORD=$(bashio::config 'deployment_password')
-GIT_BRANCH=$(bashio::config 'git_branch')
-GIT_COMMAND=$(bashio::config 'git_command')
-GIT_REMOTE=$(bashio::config 'git_remote')
-GIT_PRUNE=$(bashio::config 'git_prune')
-REPOSITORY=$(bashio::config 'repository')
-AUTO_RESTART=$(bashio::config 'auto_restart')
-RESTART_IGNORED_FILES=$(bashio::config 'restart_ignore | join(" ")')
+DEPLOYMENT_KEY_PROTOCOL=$(bashio::config 'deployment_key_protocol')
 REPEAT_ACTIVE=$(bashio::config 'repeat.active')
 REPEAT_INTERVAL=$(bashio::config 'repeat.interval')
 ################
@@ -180,7 +180,8 @@ function git-synchronize {
 }
 
 function git-synchronize {
-    ansible-playbook 
+    cd
+    ansible-playbook
 }
 
 ###################
