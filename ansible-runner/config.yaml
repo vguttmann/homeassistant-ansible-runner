@@ -11,6 +11,8 @@ arch:
   - amd64
   - i386
 init: false
+hassio_api: true
+hassio_role: homeassistant
 map:
   - share:rw
 options:
