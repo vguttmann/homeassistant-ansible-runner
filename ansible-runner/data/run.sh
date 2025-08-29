@@ -189,7 +189,10 @@ function ansible-run {
     if [[ -n "$DIRNAME" ]]; then
        cd $DIRNAME
     fi
-    ansible-playbook $PLAYBOOK_NAME
+    ansible-playbook $PLAYBOOK_NAME 2>&1 | while read -r LINE; do
+        bashio::log.info "$LINE"
+    done
+
 }
 
 ###################
