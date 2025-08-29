@@ -1,11 +1,3 @@
-
-rm -rf $repo
-git clone $url
-cd $repo
-git checkout -b ${branch:='main'}
-ansible-playbook site.yml
-
-
 #!/usr/bin/with-contenv bashio
 # vim: ft=bash
 # shellcheck shell=bash
@@ -189,9 +181,13 @@ function ansible-run {
     if [[ -n "$DIRNAME" ]]; then
        cd $DIRNAME
     fi
+
+    set -o pipefail
+
     ansible-playbook $PLAYBOOK_NAME 2>&1 | while read -r LINE; do
         bashio::log.info "$LINE"
     done
+    return ${PIPESTATUS[0]}
 
 }
 
@@ -202,12 +198,14 @@ while true; do
     check-ssh-key
     setup-user-password
     git-synchronize
-    ansible-run
-     # do we repeat?
-    if [ ! "$REPEAT_ACTIVE" == "true" ]; then
-        exit 0
-    fi
-    sleep "$REPEAT_INTERVAL"
+    pwd
+    ls -la
+    # ansible-run
+    #  # do we repeat?
+    # if [ ! "$REPEAT_ACTIVE" == "true" ]; then
+    #     exit 0
+    # fi
+    # sleep "$REPEAT_INTERVAL"
 done
 
 ###################
