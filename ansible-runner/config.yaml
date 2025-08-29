@@ -46,4 +46,3 @@ schema:
     interval: int
 image: "ghcr.io/vguttmann/{arch}-homeassistant-ansible-runner"
 startup: once
-boot: manual
