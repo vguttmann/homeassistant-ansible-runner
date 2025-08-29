@@ -34,7 +34,7 @@ configuration:
     name: Deployment Key
     description: >-
       A private SSH key that will be used for communication during Git
-      operations.
+      operations, and for ansible deployments.
   deployment_user:
     name: Deployment User
     description: >-
