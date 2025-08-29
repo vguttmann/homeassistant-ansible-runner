@@ -15,7 +15,7 @@ configuration:
   ansible_playbook:
     name: Ansible Playbook Path
     description: >-
-      Path to the relevant Ansible Playbook
+      Path to the relevant Ansible Playbook (e.g. folder/playbook.yml, playbook.yml, /folder/subfolder/playbook.yml)
   ansible_vault_secret:
     name: Ansible Vault Secret
     description: >-
