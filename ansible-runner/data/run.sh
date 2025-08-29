@@ -179,16 +179,22 @@ function git-synchronize {
     esac
 }
 
-function git-synchronize {
-    cd
-    ansible-playbook
+function ansible-run {
+    STRIPPED_PATH="${ANSIBLE_PLAYBOOK#/}"
+    PLAYBOOK_NAME="${STRIPPED_PATH##*/}"
+    DIRNAME="${STRIPPED_PATH%/*}"
+    if [[ -z "$DIRNAME" ]]; then
+       bashio::exit.nok "[Error] Ansible Playbook not present. Should be something like 'folder/subfolder/playbook.yaml'"
+    fi
+    if [[ -n "$DIRNAME" ]]; then
+       cd $DIRNAME
+    fi
+    ansible-playbook $PLAYBOOK_NAME
 }
 
 ###################
 
 #### Main program ####
-cd /config || bashio::exit.nok "[Error] Failed to cd into /config";
-
 while true; do
     check-ssh-key
     setup-user-password
