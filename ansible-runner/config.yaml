@@ -11,6 +11,8 @@ arch:
   - amd64
   - i386
 init: false
+boot: "auto"
+watchdog: true
 map:
   - share:rw
 options:
