@@ -171,7 +171,7 @@ function git-synchronize {
     esac
 }
 
-function ansible-run {
+function ansible-dry-run {
     STRIPPED_PATH="${ANSIBLE_PLAYBOOK#/}"
     PLAYBOOK_NAME="${STRIPPED_PATH##*/}"
     DIRNAME="${STRIPPED_PATH%/*}"
@@ -184,7 +184,7 @@ function ansible-run {
 
     set -o pipefail
 
-    ansible-playbook $PLAYBOOK_NAME 2>&1 | while read -r LINE; do
+    ansible-playbook $PLAYBOOK_NAME --vault-password-file ~/.vault_pass.txt 2>&1 | while read -r LINE; do
         bashio::log.info "$LINE"
     done
     return ${PIPESTATUS[0]}
@@ -200,7 +200,7 @@ while true; do
     git-synchronize
     pwd
     ls -la
-    # ansible-run
+    # ansible-dry-run
     #  # do we repeat?
     # if [ ! "$REPEAT_ACTIVE" == "true" ]; then
     #     exit 0
