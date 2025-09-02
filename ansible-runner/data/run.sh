@@ -200,6 +200,7 @@ while true; do
     git-synchronize
     pwd
     ls -la
+    ls -la
     # ansible-dry-run
     #  # do we repeat?
     # if [ ! "$REPEAT_ACTIVE" == "true" ]; then
