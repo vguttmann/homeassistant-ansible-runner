@@ -195,6 +195,7 @@ function ansible-dry-run {
 
 #### Main program ####
 while true; do
+    bashio::log.info "[Info] Starting runner..."
     check-ssh-key
     setup-user-password
     git-synchronize
