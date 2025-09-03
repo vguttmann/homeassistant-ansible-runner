@@ -42,25 +42,9 @@ function add-ssh-key {
 }
 
 function git-clone {
-    # create backup
-    BACKUP_LOCATION="/tmp/config-$(date +%Y-%m-%d_%H-%M-%S)"
-    bashio::log.info "[Info] Backup configuration to $BACKUP_LOCATION"
-
-    mkdir "${BACKUP_LOCATION}" || bashio::exit.nok "[Error] Creation of backup directory failed"
-    cp -rf /config/* "${BACKUP_LOCATION}" || bashio::exit.nok "[Error] Copy files to backup directory failed"
-
-    # remove config folder content
-    rm -rf /config/{,.[!.],..?}* || bashio::exit.nok "[Error] Clearing /config failed"
-
     # git clone
     bashio::log.info "[Info] Start git clone"
-    git clone "$REPOSITORY" /config || bashio::exit.nok "[Error] Git clone failed"
-
-    # try to copy non yml files back
-    cp "${BACKUP_LOCATION}" "!(*.yaml)" /config 2>/dev/null
-
-    # try to copy secrets file back
-    cp "${BACKUP_LOCATION}/secrets.yaml" /config 2>/dev/null
+    git clone "$REPOSITORY" /data/ || bashio::exit.nok "[Error] Git clone failed"
 }
 
 function check-ssh-key {
