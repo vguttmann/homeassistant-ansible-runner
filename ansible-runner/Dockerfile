@@ -15,4 +15,6 @@ RUN \
 # Copy root filesystem
 COPY data/run.sh /
 
+RUN chmod +x /run.sh
+
 CMD [ "/run.sh" ]
