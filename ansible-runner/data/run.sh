@@ -163,7 +163,7 @@ function git-synchronize {
 }
 
 function setup-ansible-vault-creds {
-
+    bashio::log.info "[Info] Attempting to set up Ansible Vault creds"
 }
 
 function ansible-run {
