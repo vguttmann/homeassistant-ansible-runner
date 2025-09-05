@@ -19,6 +19,12 @@ DEPLOYMENT_PASSWORD=$(bashio::config 'deployment_password')
 DEPLOYMENT_KEY_PROTOCOL=$(bashio::config 'deployment_key_protocol')
 REPEAT_ACTIVE=$(bashio::config 'repeat.active')
 REPEAT_INTERVAL=$(bashio::config 'repeat.interval')
+PLAYBOOK_PATH="${ANSIBLE_PLAYBOOK#/}"
+PLAYBOOK_PATH="${PLAYBOOK_PATH%/*}"
+PLAYBOOK_NAME="${ANSIBLE_PLAYBOOK#/}"
+PLAYBOOK_NAME="${PLAYBOOK_NAME##*/}"
+IFS='/' read -ra GIT_URL_PARTS <<< "$REPOSITORY"
+REPO_NAME=${GIT_URL_PARTS[-1]%.git}
 ################
 
 #### functions ####
@@ -44,7 +50,7 @@ function add-ssh-key {
 function git-clone {
     # git clone
     bashio::log.info "[Info] Start git clone"
-    git clone "$REPOSITORY" /data/ || bashio::exit.nok "[Error] Git clone failed"
+    git clone "$REPOSITORY" /tmp/ || bashio::exit.nok "[Error] Git clone failed"
 }
 
 function check-ssh-key {
@@ -101,14 +107,15 @@ fi
 
 function git-synchronize {
     # is /config a local git repo?
-    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+    cd /tmp/
+    if [ ! -d "$REPO_NAME" ]; then
         bashio::log.warning "[Warn] Git repository doesn't exist"
         git-clone
-        return
     fi
 
     bashio::log.info "[Info] Local git repository exists"
     # Is the local repo set to the correct origin?
+    cd $REPO_NAME
     CURRENTGITREMOTEURL=$(git remote get-url --all "$GIT_REMOTE" | head -n 1)
     if [ "$CURRENTGITREMOTEURL" != "$REPOSITORY" ]; then
         bashio::exit.nok "[Error] git origin does not match $REPOSITORY!";
@@ -155,21 +162,50 @@ function git-synchronize {
     esac
 }
 
+function setup-ansible-vault-creds {
+
+}
+
+function ansible-run {
+
+    if [[ -z "$ANSIBLE_PLAYBOOK" ]]; then
+       bashio::exit.nok "[Error] Ansible Playbook not specified. Should be something like 'folder/subfolder/playbook.yaml'"
+    fi
+    cd $PLAYBOOK_PATH
+    bashio::log.info "[Info] Performing dry run..."
+    ansible-dry-run
+    if [ $? -eq 2 ]; then
+        bashio::log.info "[Info] Changes will be made. Performing wet run now.."
+        ansible-wet-run
+        if [ $? -eq 2 ]; then
+            bashio::log.info "[Info] Ansible wet run completed with changes"
+        elif [ $? -eq 0]; then
+            bashio::exit.nok "[Error] Ansible wet run finished with error."
+        elif [ $? -eq 0]; then
+            bashio::exit.error "[Error] Ansible wet run finished without changes. This should not be possible"
+        else
+            bashio::exit.nok "[Error] Ansible dry run finished with an exit code other than 0, 1, or 2. Either this hasn't been updated in forever, or something has gone even more horribly wrong"
+        fi
+    elif [ $? -eq 1]; then
+        bashio::exit.nok "[Error] Ansible dry run finished with errors. Not attempting wet run"
+    elif [ $? -eq 0]; then
+        bashio::log.info "[Info] Ansible dry run finished without changes. Not attempting wet run"
+    else
+        bashio::exit.nok "[Error] Ansible dry run finished with an exit code other than 0, 1, or 2. Either this hasn't been updated in forever, or something has gone horribly wrong"
+    fi
+
+}
+
 function ansible-dry-run {
-    STRIPPED_PATH="${ANSIBLE_PLAYBOOK#/}"
-    PLAYBOOK_NAME="${STRIPPED_PATH##*/}"
-    DIRNAME="${STRIPPED_PATH%/*}"
-    if [[ -z "$DIRNAME" ]]; then
-       bashio::exit.nok "[Error] Ansible Playbook not present. Should be something like 'folder/subfolder/playbook.yaml'"
-    fi
-    if [[ -n "$DIRNAME" ]]; then
-       cd $DIRNAME
-    fi
+    ansible-playbook $PLAYBOOK_NAME --check --diff --vault-password-file ~/.vault_pass.txt 2>&1 | while read -r LINE; do
+        bashio::log.info "[Info] $LINE"
+    done
+    return ${PIPESTATUS[0]}
+}
 
-    set -o pipefail
-
-    ansible-playbook $PLAYBOOK_NAME --vault-password-file ~/.vault_pass.txt 2>&1 | while read -r LINE; do
-        bashio::log.info "$LINE"
+function ansible-wet-run {
+    ansible-playbook $PLAYBOOK_NAME --check --diff --vault-password-file ~/.vault_pass.txt 2>&1 | while read -r LINE; do
+    bashio::log.info "[Info] $LINE"
     done
     return ${PIPESTATUS[0]}
 
@@ -182,16 +218,14 @@ while true; do
     bashio::log.info "[Info] Starting runner..."
     check-ssh-key
     setup-user-password
+    setup-ansibel-vault-creds
     git-synchronize
-    pwd
-    ls -la
-    ls -la
-    # ansible-dry-run
-    #  # do we repeat?
-    # if [ ! "$REPEAT_ACTIVE" == "true" ]; then
-    #     exit 0
-    # fi
-    # sleep "$REPEAT_INTERVAL"
+    ansible-run
+     # do we repeat?
+    if [ ! "$REPEAT_ACTIVE" == "true" ]; then
+        exit 0
+    fi
+    sleep "$REPEAT_INTERVAL"
 done
 
 ###################
