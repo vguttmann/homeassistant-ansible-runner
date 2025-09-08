@@ -70,9 +70,9 @@ fi
 
 function setup-user-password {
 if [ -n "$DEPLOYMENT_USER" ]; then
-    cd /config || return
+    cd /tmp/${REPO_NAME} || return
     bashio::log.info "[Info] setting up credential.helper for user: ${DEPLOYMENT_USER}"
-    git config --system credential.helper 'store --file=/tmp/git-credentials'
+    git config credential.helper 'store --file=/tmp/git-credentials'
 
     # Extract the hostname from repository
     h="$REPOSITORY"
