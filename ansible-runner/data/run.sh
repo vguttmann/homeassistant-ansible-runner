@@ -173,6 +173,9 @@ function ansible-run {
     fi
     cd $PLAYBOOK_PATH
     bashio::log.info "[Info] Performing dry run..."
+    ansible all -m ping 2>&1 | while read -r LINE; do
+        bashio::log.info "[Info] $LINE"
+    done
     ansible-dry-run
     if [ $? -eq 2 ]; then
         bashio::log.info "[Info] Changes will be made. Performing wet run now.."
