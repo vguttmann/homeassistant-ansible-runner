@@ -221,7 +221,7 @@ while true; do
     bashio::log.info "[Info] Starting runner..."
     check-ssh-key
     setup-user-password
-    setup-ansibel-vault-creds
+    setup-ansible-vault-creds
     git-synchronize
     ansible-run
      # do we repeat?
