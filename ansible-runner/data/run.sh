@@ -1,8 +1,8 @@
 #!/usr/bin/with-contenv bashio
 # vim: ft=bash
 # shellcheck shell=bash
-
 # shellcheck disable=SC2034
+
 CONFIG_PATH=/data/options.json
 HOME=~
 
@@ -122,6 +122,7 @@ function git-synchronize {
 
     cd /data/repo
     # @TODO: Handle other repos existing alongside
+
     if [ ! -d "$REPO_NAME" ]; then
         bashio::log.warning "[Warn] Git repository doesn't exist"
         rm -rf /data/repo/
