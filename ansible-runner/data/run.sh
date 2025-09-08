@@ -50,7 +50,8 @@ function add-ssh-key {
 function git-clone {
     # git clone
     bashio::log.info "[Info] Start git clone"
-    git clone "$REPOSITORY" /tmp/ || bashio::exit.nok "[Error] Git clone failed"
+    cd /tmp/repo
+    git clone "$REPOSITORY" || bashio::exit.nok "[Error] Git clone failed"
 }
 
 function check-ssh-key {
@@ -70,7 +71,7 @@ fi
 
 function setup-user-password {
 if [ -n "$DEPLOYMENT_USER" ]; then
-    cd /tmp/${REPO_NAME} || return
+    cd /tmp/repo/${REPO_NAME} || return
     bashio::log.info "[Info] setting up credential.helper for user: ${DEPLOYMENT_USER}"
     git config credential.helper 'store --file=/tmp/git-credentials'
 
@@ -107,10 +108,16 @@ fi
 
 function git-synchronize {
     # is /config a local git repo?
-    cd /tmp/
+    cd /
+    if [ ! -d /tmp/repo ]; then
+        mkdir /tmp/repo
+    fi
+
+    cd /tmp/repo
+    # @TODO: Handle other repos existing alongside
     if [ ! -d "$REPO_NAME" ]; then
         bashio::log.warning "[Warn] Git repository doesn't exist"
-        rm -rf /tmp/
+        rm -rf /tmp/repo/
         git-clone
     fi
 
