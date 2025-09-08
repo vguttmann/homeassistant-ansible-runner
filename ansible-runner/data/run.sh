@@ -122,7 +122,8 @@ function git-synchronize {
     ls -Rla | while read -r LINE; do
         bashio::log.info "[Info] $LINE"
     done
-    cat /proc/$$/attr/current | bashio::log.info - 
+    profile_name=$(cat /proc/$$/attr/current)
+    bashio::log.info "[Info] $profile_name" 
     cd /data/repo
     # @TODO: Handle other repos existing alongside
 
