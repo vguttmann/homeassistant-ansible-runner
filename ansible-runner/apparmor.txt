@@ -25,6 +25,8 @@ profile ansible-runner flags=(attach_disconnected,mediate_deleted) {
   /tmp/** rwk,
 
   # Access to options.json and other files within your addon
+  /data/ rw,
+  /data/* rw,
   /data/** rw,
 
   # Start new profile for service
