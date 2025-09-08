@@ -50,7 +50,7 @@ function add-ssh-key {
 function git-clone {
     # git clone
     bashio::log.info "[Info] Start git clone"
-    cd /tmp/repo
+    cd /data/repo
     git clone "$REPOSITORY" || bashio::exit.nok "[Error] Git clone failed"
 }
 
@@ -71,7 +71,7 @@ fi
 
 function setup-user-password {
 if [ -n "$DEPLOYMENT_USER" ]; then
-    cd /tmp/repo/${REPO_NAME} || return
+    cd /data/repo/${REPO_NAME} || return
     bashio::log.info "[Info] setting up credential.helper for user: ${DEPLOYMENT_USER}"
     git config credential.helper 'store --file=/tmp/git-credentials'
 
@@ -108,23 +108,23 @@ fi
 
 function git-synchronize {
     # is /config a local git repo?
-    cd /tmp/
+    cd /data/
     cd /
-    bashio::log.info "[Info] Checking if /tmp/repo exists"
-    if [ ! -d /tmp/repo ]; then
-        bashio::log.info "[Info] /tmp/repo does not exist, creating it"
-        mkdir /tmp/repo
+    bashio::log.info "[Info] Checking if /data/repo exists"
+    if [ ! -d /data/repo ]; then
+        bashio::log.info "[Info] /data/repo does not exist, creating it"
+        mkdir /data/repo
     fi
-    cd /tmp/
+    cd /data/
     ls -Rla | while read -r LINE; do
         bashio::log.info "[Info] $LINE"
     done
 
-    cd /tmp/repo
+    cd /data/repo
     # @TODO: Handle other repos existing alongside
     if [ ! -d "$REPO_NAME" ]; then
         bashio::log.warning "[Warn] Git repository doesn't exist"
-        rm -rf /tmp/repo/
+        rm -rf /data/repo/
         git-clone
     fi
 
