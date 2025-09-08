@@ -108,12 +108,17 @@ fi
 
 function git-synchronize {
     # is /config a local git repo?
+    cd /tmp/
     cd /
     bashio::log.info "[Info] Checking if /tmp/repo exists"
     if [ ! -d /tmp/repo ]; then
         bashio::log.info "[Info] /tmp/repo does not exist, creating it"
         mkdir /tmp/repo
     fi
+    cd /tmp/
+    ls -Rla | while read -r LINE; do
+        bashio::log.info "[Info] $LINE"
+    done
 
     cd /tmp/repo
     # @TODO: Handle other repos existing alongside
