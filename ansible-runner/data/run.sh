@@ -110,6 +110,7 @@ function git-synchronize {
     cd /tmp/
     if [ ! -d "$REPO_NAME" ]; then
         bashio::log.warning "[Warn] Git repository doesn't exist"
+        rm -rf /tmp/
         git-clone
     fi
 
