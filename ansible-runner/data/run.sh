@@ -50,6 +50,9 @@ function add-ssh-key {
 function git-clone {
     # git clone
     bashio::log.info "[Info] Start git clone"
+    ls -Rla | while read -r LINE; do
+        bashio::log.info "[Info] $LINE"
+    done
     cd /data/repo
     git clone "$REPOSITORY" || bashio::exit.nok "[Error] Git clone failed"
 }
