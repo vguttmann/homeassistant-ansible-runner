@@ -11,7 +11,8 @@ RUN apk add --no-cache \
     ansible \
     git \
     ca-certificates \
-    openssh-client
+    openssh-client \
+    openssl
 
 # Build arguments
 ARG BUILD_ARCH
