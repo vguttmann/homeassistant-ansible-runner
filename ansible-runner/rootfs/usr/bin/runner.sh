@@ -50,10 +50,6 @@ function add-ssh-key {
 function git-clone {
     # git clone
     bashio::log.info "[Info] Start git clone"
-    ls -Rla | while read -r LINE; do
-        bashio::log.info "[Info] $LINE"
-    done
-    cd /data/repo
     git clone "$REPOSITORY" || bashio::exit.nok "[Error] Git clone failed"
 }
 
@@ -110,28 +106,21 @@ fi
 }
 
 function git-synchronize {
-    # is /config a local git repo?
-    cd /data/
     cd /
     bashio::log.info "[Info] Checking if /data/repo exists"
     if [ ! -d /data/repo ]; then
         bashio::log.info "[Info] /data/repo does not exist, creating it"
         mkdir /data/repo
-        touch /data/touch1
-        touch /data/repo/touch2
     fi
-    cd /data/
-    ls -Rla | while read -r LINE; do
-        bashio::log.info "[Info] $LINE"
-    done
-    profile_name=$(cat /proc/$$/attr/current)
-    bashio::log.info "[Info] $profile_name" 
     cd /data/repo
     # @TODO: Handle other repos existing alongside
 
     if [ ! -d "$REPO_NAME" ]; then
         bashio::log.warning "[Warn] Git repository doesn't exist"
+        cd /data
         rm -rf /data/repo/
+        mkdir /data/repo/
+        cd /data/repo/
         git-clone
     fi
 
