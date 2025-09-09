@@ -7,10 +7,11 @@ COPY rootfs /
 
 # Setup base
 RUN apk add --no-cache \
-    coreutils=9.7-r1 \
-    wget=1.25.0-r1 \
+    coreutils \
     ansible \
-    git
+    git \
+    ca-certificates \
+    openssh-client
 
 # Build arguments
 ARG BUILD_ARCH
