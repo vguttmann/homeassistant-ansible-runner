@@ -20,6 +20,17 @@ profile ansible-runner flags=(attach_disconnected,mediate_deleted) {
   /run/{,**} rwk,
   /dev/tty rw,
 
+  # Allow Git to execute its helpers
+  /usr/bin/git ix,
+  /usr/libexec/git-core/** ix,
+  /usr/lib/git-core/** ix,
+
+  # Allow SSH client if needed
+  /usr/bin/ssh ix,
+  # (optional) allow config and keys if you’ll use them
+  /etc/ssh/** r,
+  /root/.ssh/** rw,
+
   # Bashio
   /usr/lib/bashio/** ix,
   /tmp/** rwk,
