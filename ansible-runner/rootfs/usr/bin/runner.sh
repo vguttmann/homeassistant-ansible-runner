@@ -117,6 +117,8 @@ function git-synchronize {
     if [ ! -d /data/repo ]; then
         bashio::log.info "[Info] /data/repo does not exist, creating it"
         mkdir /data/repo
+        touch /data/touch1
+        touch /data/repo/touch2
     fi
     cd /data/
     ls -Rla | while read -r LINE; do
