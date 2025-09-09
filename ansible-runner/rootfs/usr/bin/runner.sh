@@ -45,6 +45,7 @@ function add-ssh-key {
 
     chmod 600 "${HOME}/.ssh/config"
     chmod 600 "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
+    chmod 700 "${HOME}/.ssh/"
 }
 
 function git-clone {
