@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Ansible Runner
-version: "1.2.2"
+version: "1.2.3"
 slug: ansible-runner
 description: A dockerized Ansible runner
 url: "https://github.com/vguttmann/homeassistant-ansible-runner/tree/main/ansible-runner"
