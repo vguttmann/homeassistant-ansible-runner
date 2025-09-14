@@ -42,6 +42,10 @@ function add-ssh-key {
     while read -r line; do
         echo "$line" >> "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
     done <<< "$DEPLOYMENT_KEY"
+    bashio::log.info "[Info] Outputting key"
+    cat /root/.ssh/id_rsa | while read -r LINE; do
+        bashio::log.info "[Info] $LINE"
+    done
 
     chmod 600 "${HOME}/.ssh/config"
     chmod 600 "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"

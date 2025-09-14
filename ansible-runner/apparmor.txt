@@ -27,7 +27,7 @@ profile ansible-runner flags=(attach_disconnected,mediate_deleted) {
 
   # Allow SSH client if needed
   /usr/bin/ssh ix,
-  # (optional) allow config and keys if you’ll use them
+  # (optional) allow config and keys if you'll use them
   /etc/ssh/** r,
   /root/.ssh/** rw,
 
