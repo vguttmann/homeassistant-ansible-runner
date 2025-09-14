@@ -42,11 +42,12 @@ function add-ssh-key {
     while read -r line; do
         echo "$line" >> "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
     done <<< "$DEPLOYMENT_KEY"
-    bashio::log.info "[Info] Outputting key"
-    cat /root/.ssh/id_rsa | while read -r LINE; do
-        bashio::log.info "[Info] $LINE"
-    done
-
+    cat "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}" | tr -d '\n' > "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}2"
+    mv "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}2" "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
+    sed -i -E 's/\s|\t|\n|\r//g' "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
+    sed -i 's/-----BEGINOPENSSHPRIVATEKEY-----/-----BEGIN OPENSSH PRIVATE KEY-----\n/g' "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
+    sed -i 's/-----ENDOPENSSHPRIVATEKEY-----/\n-----END OPENSSH PRIVATE KEY-----\n/g' "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
+    sed -i -E 's/(.{70})/\1\n/g' "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
     chmod 600 "${HOME}/.ssh/config"
     chmod 600 "${HOME}/.ssh/id_${DEPLOYMENT_KEY_PROTOCOL}"
     chmod 700 "${HOME}/.ssh/"

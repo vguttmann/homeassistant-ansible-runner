@@ -1,10 +1,11 @@
 # Ansible Runner Add-on: Execute playbooks through Home Assistant
 
-The only constant and 100% reliable part in my Homelab has been Home Assistant, so I decided to base the Ansible Runner that configurest the rest of my Homelab here.
+The only constant and 100% reliable part in my Homelab has been Home Assistant, so I decided to use it to execute the playbooks that configure the rest of my home lab through it.
 
 # SSH Keys
 
-The SSH keys to deploy with Ansible need to be added to the deployment keys, the same keys are also used for authenticating to your git server via SSH
+The SSH keys to deploy with Ansible need to be added to the deployment keys, the same keys are also used for authenticating to your git server via SSH.
+Unlike the Git Pull plugin, you can just copy your whole private key and paste it in as one. It will almost certainly break the formatting of the page, but there are no problems with missing/stripped newlines.
 
 # Ansible Vault
 
