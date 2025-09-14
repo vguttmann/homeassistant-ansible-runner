@@ -13,7 +13,7 @@ arch:
 init: false
 options:
   repository: null
-  git_branch: master
+  git_branch: main
   git_remote: origin
   ansible_playbook: 'playbook.yaml'
   ansible_vault_secret: ''
